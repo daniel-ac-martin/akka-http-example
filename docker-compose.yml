@@ -1,0 +1,14 @@
+api:
+    build: "."
+    links:
+        - postgres
+    ports:
+        - "8080:8080"
+postgres:
+    image: docker.digital.homeoffice.gov.uk/lev-postgres:latest
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_DB=ron
+    ports:
+      - "5432:5432"
