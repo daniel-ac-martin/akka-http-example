@@ -11,7 +11,7 @@ import akka.http.scaladsl.server.{ HttpApp, Route }
 //import org.json4s.native.Serialization
 
 /**
- * Server will be started calling `WebServerHttpApp.startServer("localhost", 8080)`
+ * Server will be started calling `WebServerHttpApp.startServer()`
  * and it will be shutdown after pressing return.
  */
 object WebServerHttpApp extends HttpApp with App {
@@ -20,5 +20,5 @@ object WebServerHttpApp extends HttpApp with App {
   def routes: Route = Routes.routes
 
   // This will start the server until the return key is pressed
-  startServer("localhost", 8080)
+  startServer(Config.httpd.host, Config.httpd.port)
 }

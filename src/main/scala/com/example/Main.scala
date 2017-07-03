@@ -14,10 +14,10 @@ object Main extends App {
 
   implicit val log: LoggingAdapter = Logging(system, getClass)
 
-  val bindingFuture = Http().bindAndHandle(Routes.routes, "localhost", 8080)
+  val bindingFuture = Http().bindAndHandle(Routes.routes, Config.httpd.host, Config.httpd.port)
 
   println("Press RETURN to stop...")
-  log.info(s"Server online at http://localhost:8080/")
+  log.info(s"Server online at http://${Config.httpd.host}:${Config.httpd.port}/")
   StdIn.readLine() // let it run until user presses return
   bindingFuture
     .flatMap(_.unbind()) // trigger unbinding from the port
