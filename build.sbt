@@ -7,7 +7,7 @@ lazy val root = (project in file(".")).
       organization := "com.example",
       scalaVersion := "2.12.2"
     )),
-    mainClass in assembly := Some("com.example.WebServerHttpApp"),
+    mainClass in assembly := Some("com.example.Main"),
     name := "example",
     version := "0.1.0",
     libraryDependencies ++= Seq(
