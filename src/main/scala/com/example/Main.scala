@@ -6,7 +6,7 @@ import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import scala.io.StdIn
 
-object Main extends App {
+object Main extends App with MyLogging {
   implicit val system = ActorSystem("example")
   implicit val materializer = ActorMaterializer()
   // needed for the future flatMap/onComplete in the end
@@ -14,7 +14,7 @@ object Main extends App {
 
   implicit val log: LoggingAdapter = Logging(system, getClass)
 
-  val bindingFuture = Http().bindAndHandle(Routes.routes, Config.httpd.host, Config.httpd.port)
+  val bindingFuture = Http().bindAndHandle(logRequests(Routes.routes), Config.httpd.host, Config.httpd.port)
 
   println("Press RETURN to stop...")
   log.info(s"Server online at http://${Config.httpd.host}:${Config.httpd.port}/")
