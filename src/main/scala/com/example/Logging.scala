@@ -8,23 +8,21 @@ import akka.http.scaladsl.server.directives.LogEntry
 import akka.http.scaladsl.server.directives.DebuggingDirectives.{ logRequest, logRequestResult }
 import akka.http.scaladsl.server.directives.MiscDirectives.extractClientIP
 
+final case class RequestData(ip: String, method: String, url: String)
+final case class ResponseData(ip: String, method: String, url: String, status: String)
+
 trait MyLogging {
-  val requestString: HttpRequest => String = req => s"${req.method.name} ${req.uri}"
-
   val requestInfo: RemoteAddress => HttpRequest => LogEntry = { ip => req =>
-    val reqStr = requestString(req)
+    val data = RequestData(ip.toString, req.method.name, req.uri.toString)
 
-    LogEntry(s"${ip} -> ${reqStr} : ${req}", InfoLevel)
+    LogEntry(data, InfoLevel)
   }
 
-  val responseInfo: RemoteAddress => HttpRequest => RouteResult => Option[LogEntry] = { ip => req =>
-    val reqStr = requestString(req)
-
+  val responseInfo: RemoteAddress => HttpRequest => RouteResult => Option[LogEntry] = ip => req =>
     {
-      case RouteResult.Complete(res) => Some(LogEntry(s"${ip} <- ${reqStr} ${res.status}", InfoLevel))
-      case RouteResult.Rejected(msg) => Some(LogEntry(s"${ip} <- ${reqStr} ${msg}", InfoLevel))
+      case RouteResult.Complete(res) => Some(LogEntry(ResponseData(ip.toString, req.method.name, req.uri.toString, res.status.toString), InfoLevel))
+      case RouteResult.Rejected(msg) => Some(LogEntry(ResponseData(ip.toString, req.method.name, req.uri.toString, msg.toString), InfoLevel))
     }
-  }
 
   val logRequests: Route => Route = { routes =>
     extractClientIP { ip =>
