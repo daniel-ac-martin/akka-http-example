@@ -12,12 +12,16 @@ lazy val root = (project in file(".")).
     version := "0.1.0",
     libraryDependencies ++= Seq(
       "com.typesafe.akka" %% "akka-http"            % akkaHttpVersion,
-      "com.typesafe.akka" %% "akka-http-xml"        % akkaHttpVersion,
       "com.typesafe.akka" %% "akka-stream"          % akkaVersion,
-      "com.typesafe.akka" %% "akka-http-testkit"    % akkaHttpVersion % Test,
+      // XML support
+      "com.typesafe.akka" %% "akka-http-xml"        % akkaHttpVersion,
+      // JSON support
       "de.heikoseeberger" %% "akka-http-json4s"     % "1.17.0",
       "org.json4s"        %% "json4s-native"        % "3.5.2",
+      // Testing
+      "com.typesafe.akka" %% "akka-http-testkit"    % akkaHttpVersion % Test,
       "org.scalatest"     %% "scalatest"            % "3.0.1"         % Test,
+      // Logging
       "com.typesafe.akka" %% "akka-slf4j"           % akkaVersion,
       "ch.qos.logback"    %  "logback-classic"      % "1.2.3"
     )
