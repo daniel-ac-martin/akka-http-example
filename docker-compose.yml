@@ -5,7 +5,7 @@ api:
     ports:
         - "8080:8080"
 postgres:
-    image: docker.digital.homeoffice.gov.uk/lev-postgres:latest
+    image: postgres:9-alpine
     environment:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=password
