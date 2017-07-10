@@ -5,7 +5,7 @@ lazy val root = (project in file(".")).
   settings(
     inThisBuild(List(
       organization := "com.example",
-      scalaVersion := "2.12.2"
+      scalaVersion := "2.11.8"
     )),
     mainClass in assembly := Some("com.example.Main"),
     name := "example",
@@ -24,6 +24,9 @@ lazy val root = (project in file(".")).
       // Logging
       "com.typesafe.akka"    %% "akka-slf4j"               % akkaVersion,
       "ch.qos.logback"       %  "logback-classic"          % "1.2.3",
-      "net.logstash.logback" %  "logstash-logback-encoder" % "4.11"
+      "net.logstash.logback" %  "logstash-logback-encoder" % "4.11",
+      // Database
+      "org.postgresql"       %  "postgresql"               % "9.3-1102-jdbc41",
+      "com.typesafe.play"    %% "anorm"                    % "2.5.1"
     )
   )

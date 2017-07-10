@@ -7,8 +7,8 @@ api:
 postgres:
     image: postgres:9-alpine
     environment:
-        - POSTGRES_USER=postgres
+        - POSTGRES_USER=user
         - POSTGRES_PASSWORD=password
-        - POSTGRES_DB=ron
+        - POSTGRES_DB=database
     ports:
       - "5432:5432"
