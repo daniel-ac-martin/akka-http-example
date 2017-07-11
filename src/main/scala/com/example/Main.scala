@@ -18,6 +18,7 @@ object Main extends App with MyLogging {
 
   println("Press RETURN to stop...")
   log.info(s"Server online at http://${Config.httpd.host}:${Config.httpd.port}/")
+  /*
   StdIn.readLine() // let it run until user presses return
   bindingFuture
     .flatMap(_.unbind()) // trigger unbinding from the port
@@ -25,4 +26,5 @@ object Main extends App with MyLogging {
       log.info("Shutting down the server")
       system.terminate()
     }) // and shutdown when done
+  */
 }

@@ -1,14 +1,17 @@
 api:
-    build: "."
-    links:
-        - postgres
-    ports:
-        - "8080:8080"
+  build: "."
+  environment:
+    - POSTGRES_APP_USER=app
+    - POSTGRES_APP_PASSWORD=password
+  links:
+    - postgres
+  ports:
+    - "8080:8080"
 postgres:
-    image: postgres:9-alpine
-    environment:
-        - POSTGRES_USER=user
-        - POSTGRES_PASSWORD=password
-        - POSTGRES_DB=database
-    ports:
-      - "5432:5432"
+  image: postgres:9-alpine
+  environment:
+    - POSTGRES_USER=user
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_DB=database
+  ports:
+    - "5432:5432"
