@@ -1,55 +1,61 @@
-CREATE USER "${app_user}"
-WITH PASSWORD '${app_password}';
-
+-- Create tables
 CREATE TYPE sex AS ENUM ('female', 'male');
 
 CREATE TYPE species AS ENUM ('cat', 'dog');
 
 CREATE TABLE pets
 (
-  "id"      SERIAL    PRIMARY KEY,
-  "dob"     TIMESTAMP NOT NULL,
+  "id"      BIGSERIAL PRIMARY KEY,
+  "dob"     DATE      NOT NULL,
   "name"    VARCHAR   NOT NULL,
   "sex"     SEX       NOT NULL,
   "species" SPECIES   NOT NULL
 );
 
-CREATE FUNCTION pet
+-- Create stored precedures (functions) and indexes
+CREATE FUNCTION pet(x BIGINT)
+RETURNS TABLE
 (
-  INOUT "id"      INTEGER,
-  OUT   "dob"     TIMESTAMP,
-  OUT   "name"    VARCHAR,
-  OUT   "sex"     SEX,
-  OUT   "species" SPECIES
+  "id"      BIGINT,
+  "dob"     DATE,
+  "name"    VARCHAR,
+  "sex"     SEX,
+  "species" SPECIES
 )
-AS $$
-BEGIN
-  SELECT INTO
-    "id"   "id",
-    "dob"  "dob",
-    "name" "name",
-    "sex"  "sex"
-  FROM pets
-  WHERE id = id;
-END; $$
-LANGUAGE plpgsql;
+AS
+$$
+  SELECT
+    "id",
+    "dob",
+    "name",
+    "sex",
+    "species"
+  FROM "pets"
+  WHERE "id" = "x"
+  LIMIT 1
+$$
+LANGUAGE SQL;
 
 CREATE FUNCTION new_pet
 (
-  OUT "id"      INTEGER,
-  IN  "dob"     TIMESTAMP,
-  IN  "name"    VARCHAR,
-  IN  "sex"     SEX,
-  IN  "species" SPECIES
+  "dob"     DATE,
+  "name"    VARCHAR,
+  "sex"     SEX,
+  "species" SPECIES
 )
-AS $$
-BEGIN
-  INSERT INTO pets
-         ("dob", "name", "sex")
-  VALUES ("dob", "name", "sex")
+RETURNS BIGINT AS
+$$
+  INSERT INTO "pets"
+         ("dob", "name", "sex", "species")
+  VALUES ("dob", "name", "sex", "species")
   RETURNING "id";
-END; $$
-LANGUAGE plpgsql;
+$$
+LANGUAGE SQL;
 
-GRANT EXECUTE ON FUNCTION pet(INTEGER) TO "${app_user}";
-GRANT EXECUTE ON FUNCTION new_pet(TIMESTAMP, VARCHAR, SEX, SPECIES) TO "${app_user}";
+-- Create app user and assign permissions
+CREATE USER "${app_user}"
+WITH PASSWORD '${app_password}';
+
+GRANT SELECT ON TABLE pets TO "${app_user}";
+GRANT EXECUTE ON FUNCTION pet(BIGINT) TO "${app_user}";
+GRANT EXECUTE ON FUNCTION new_pet(DATE, VARCHAR, SEX, SPECIES) TO "${app_user}";

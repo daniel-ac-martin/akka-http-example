@@ -2,6 +2,11 @@
 <configuration>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!--
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <Pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} - %-5level: %msg [%thread] [%logger{36}]%n</Pattern>
+    </encoder>
+    -->
     <encoder class="net.logstash.logback.encoder.LogstashEncoder">
       <enableContextMap>true</enableContextMap>
       <includeCallerInfo>true</includeCallerInfo>
@@ -9,9 +14,12 @@
   </appender>
 
   <logger name="com.example" level="DEBUG" />
-  <logger name="akka" level="INFO" />
 
-  <root level="warn">
+  <logger name="akka" level="INFO" />
+  <logger name="akka.event.slf4j" level="WARN" />
+  <logger name="com.typesafe.sslconfig" level="WARN" />
+
+  <root level="INFO">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>

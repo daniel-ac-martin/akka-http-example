@@ -24,5 +24,10 @@ cd flyway/
 ./flyway migrate -url="${POSTGRES_URL}" -user="${POSTGRES_USER}" -password="${POSTGRES_PASSWORD}" -placeholders.app_user="${POSTGRES_APP_USER}" -placeholders.app_password="${POSTGRES_APP_PASSWORD}"
 cd
 
+# Blot out secrets
+export POSTGRES_USER=""
+export POSTGRES_PASSWORD=""
+
 # Run application
+export POSTGRES_URL
 java -jar ./app.jar

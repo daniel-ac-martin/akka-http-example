@@ -11,4 +11,12 @@ object Config {
     httpdConfig.getString("host"),
     httpdConfig.getInt("port")
   )
+
+  case class Jdbc(url: String, user: String, password: String)
+  protected val jdbcConfig = config.getConfig("jdbc")
+  val jdbc = Jdbc(
+    jdbcConfig.getString("url"),
+    jdbcConfig.getString("user"),
+    jdbcConfig.getString("password")
+  )
 }
