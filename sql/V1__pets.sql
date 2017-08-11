@@ -16,6 +16,29 @@ CREATE TABLE pets
 CREATE FUNCTION pet(x BIGINT)
 RETURNS TABLE
 (
+"id"      BIGINT,
+"dob"     DATE,
+"name"    VARCHAR,
+"sex"     SEX,
+"species" SPECIES
+)
+AS
+$$
+SELECT
+"id",
+"dob",
+"name",
+"sex",
+"species"
+FROM "pets"
+WHERE "id" = "x"
+LIMIT 1
+$$
+LANGUAGE SQL;
+
+CREATE FUNCTION pets(s_dob_start DATE, s_dob_finish DATE, s_name_fragment VARCHAR, s_sex SEX, s_species SPECIES)
+RETURNS TABLE
+(
   "id"      BIGINT,
   "dob"     DATE,
   "name"    VARCHAR,
@@ -31,10 +54,21 @@ $$
     "sex",
     "species"
   FROM "pets"
-  WHERE "id" = "x"
-  LIMIT 1
+  WHERE "dob" >= "s_dob_start"
+    AND "dob" <= "s_dob_finish"
+    AND "name" LIKE ('%' || "s_name_fragment" || '%')
+    AND "sex" = "s_sex"
+    AND "species" = "s_species"
 $$
 LANGUAGE SQL;
+
+CREATE INDEX "pets1" ON "pets"
+(
+  "dob",
+  "name",
+  "sex",
+  "species"
+);
 
 CREATE FUNCTION new_pet
 (
