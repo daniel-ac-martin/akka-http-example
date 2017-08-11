@@ -5,32 +5,32 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import org.scalatest.{ Matchers, WordSpec }
 
-class WebServerHttpAppSpec extends WordSpec with Matchers with ScalatestRouteTest {
+class RoutesSpec extends WordSpec with Matchers with ScalatestRouteTest {
 
-  "WebServiceHttpApp" should {
+  "Routes" should {
     "answer to any request to `/`" in {
-      Get("/") ~> WebServerHttpApp.routes ~> check {
+      Get("/") ~> Routes.routes ~> check {
         status shouldBe StatusCodes.OK
         responseAs[String] shouldBe "{\"msg\":\"Server up and running\"}"
       }
-      Post("/") ~> WebServerHttpApp.routes ~> check {
+      Post("/") ~> Routes.routes ~> check {
         status shouldBe StatusCodes.OK
         responseAs[String] shouldBe "{\"msg\":\"Server up and running\"}"
       }
     }
     "answer to GET requests to `/hello`" in {
-      Get("/hello") ~> WebServerHttpApp.routes ~> check {
+      Get("/hello") ~> Routes.routes ~> check {
         status shouldBe StatusCodes.OK
         responseAs[String] shouldBe "{\"msg\":\"Say hello to akka-http\"}"
       }
     }
     "not handle a POST request to `/hello`" in {
-      Post("/hello") ~> WebServerHttpApp.routes ~> check {
+      Post("/hello") ~> Routes.routes ~> check {
         handled shouldBe false
       }
     }
     "respond with 405 when not issuing a GET to `/hello` and route is sealed" in {
-      Put("/hello") ~> Route.seal(WebServerHttpApp.routes) ~> check {
+      Put("/hello") ~> Route.seal(Routes.routes) ~> check {
         status shouldBe StatusCodes.MethodNotAllowed
       }
     }
